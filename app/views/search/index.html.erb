@@ -1,0 +1,82 @@
+<h1>Search</h1>
+
+<div class='row'>
+
+  <div class="col-md-3">
+
+    <%= form_tag search_index_path, method: :get do %>
+
+      <div class="form-group">
+        <label>Search</label>
+        <input type="search" class="form-control" name="search[q]" placeholder="Search" value="<%= (params[:search].present? && params[:search][:q].present?) ? params[:search][:q] : "" %>">
+      </div>
+
+      <div class='form-group'>
+        <button type="submit" class="btn btn-default" id="search_btn">Search</button>
+        <%= link_to 'Reset Search', search_index_path, {class: 'btn btn-default', role: :button} %>
+      </div>
+
+      <%# facets %>
+
+      <% @search.response.facets.each do |facet,facet_data| %>
+        <div class='form-group'>
+          <label><%= ActiveSupport::Inflector.humanize(facet) %></label>
+          <select class='form-control facet_select' size='5' name="search[<%= facet %>][]" multiple>
+            <% facet_data.terms.each do |f| %>
+              <% selected = (params[:search].present? && params[:search][facet].present? && params[:search][facet].include?(f[:term].to_s)) ? true : false %>
+              <option data-selected="<%= selected %>" value="<%= f[:term] %>" <%= selected ? "selected" : "" %> >
+                <%= f[:term] %>
+                (<%= f[:count] %>)
+              </option>
+            <% end %>
+          </select>
+        </div>
+      <% end %>
+
+    <% end %>
+
+  </div>
+
+  <div class="col-md-9">
+
+    <%# results %>
+
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <% @search.klass.attribute_names.each do |field| %>
+            <th>
+              <%= field %>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @search.results.each do |result| %>
+          <tr>
+            <% @search.klass.attribute_names.each do |field| %>
+              <td>
+                <%= result._source[field] if result._source.respond_to?(field) %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+
+<% if Rails.env.development? %>
+	<br/>
+	<br/>
+	<br/>
+	<p><b>References:</b></p>
+	<p>- http://ericlondon.com/2014/09/02/rails-4-elasticsearch-integration-with-dynamic-facets-and-filters-via-model-concern.html</p>
+	<p>- http://www.toptal.com/ruby-on-rails/elasticsearch-for-ruby-on-rails-an-introduction-to-chewy</p>
+	<p>- https://coderwall.com/p/zvyg7a/convert-tabs-to-spaces-on-file-save</p>
+	<p>- http://railscasts.com/episodes/306-elasticsearch-part-1</p>
+	<p>- http://railscasts.com/episodes/278-search-with-sunspot</p>
+	<p>- https://semaphoreapp.com/blog/2013/08/14/setting-up-bdd-stack-on-a-new-rails-4-application.html</p>
+<% end %>

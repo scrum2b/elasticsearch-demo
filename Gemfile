@@ -43,6 +43,7 @@ group :development, :test do
 	gem 'sqlite3'
   gem 'rspec-rails', '~> 2.0'
   gem 'factory_girl_rails'
+  gem 'random-word'
 end
 
 group :test do
@@ -52,7 +53,12 @@ group :test do
   gem 'selenium-webdriver'
 end
 
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
+gem 'tire'
+
 group :production do
 	gem 'pg'
-	#gem 'rails_12factor'
+	gem 'rails_12factor'
+  gem 'bonsai-elasticsearch-rails'
 end
