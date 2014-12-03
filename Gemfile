@@ -5,6 +5,7 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.7'
+gem 'sqlite3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
@@ -38,24 +39,24 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-group :development, :test do
-	# Use sqlite3 as the database for Active Record
-	gem 'sqlite3'
-  gem 'rspec-rails', '~> 2.0'
-  gem 'factory_girl_rails'
-  gem 'random-word'
+gem 'elasticsearch-model', git: 'git://github.com/elasticsearch/elasticsearch-rails.git'
+gem 'elasticsearch-rails', git: 'git://github.com/elasticsearch/elasticsearch-rails.git'
+
+# for seeds
+gem 'random-word', group: [:development, :test]
+
+# development/debug gems
+group :development do
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'quiet_assets'
+  gem 'better_errors', '< 2' # https://github.com/charliesome/better_errors/commit/a449f136124f2933a39f038249693bda381cd097
 end
 
-group :test do
-  gem 'shoulda-matchers'
-  gem 'cucumber-rails', require: false
-  gem 'database_cleaner'
-  gem 'selenium-webdriver'
-end
+# bootstrap gems
+gem 'bootstrap-sass', '~> 3.2.0'
+gem 'autoprefixer-rails'
 
-gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
-gem 'tire'
 
 group :production do
 	gem 'pg'
